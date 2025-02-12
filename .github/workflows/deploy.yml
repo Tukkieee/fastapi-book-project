@@ -11,21 +11,15 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Set up SSH Key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan 52.35.34.186 >> ~/.ssh/known_hosts
-
-      - name: Deploy Application
-        run: |
-          ssh tukkie@52.35.34.186 <<EOF
+        uses:  appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: tukkie
+          password: ${{ secrets.PASSWORD }}
+          script: |
             cd /var/www/fastapi-book-project
             git pull origin main
             source /var/www/fastapi-book-project/venv/bin/activate
             pip install -r requirements.txt
             systemctl restart your-fastapi-service
-          EOF
+          
