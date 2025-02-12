@@ -14,12 +14,12 @@ jobs:
         uses:  appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.HOST }}
-          username: tukkie
-          password: ${{ secrets.PASSWORD }}
+          username: ubuntu
+          key: ${{ secrets.KEY }}
           script: |
-            cd /var/www/fastapi-book-project
+            cd fastapi-book-project
             git pull origin main
-            source /var/www/fastapi-book-project/venv/bin/activate
+            source venv/bin/activate
             pip install -r requirements.txt
-            systemctl restart your-fastapi-service
+            systemctl restart fastapi
           
